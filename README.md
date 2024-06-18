@@ -3,7 +3,7 @@
 </p>
 
 # 🥦 HEIF-Converter
-> This module uses the C APIs libheif, libpng, and libjpeg to bind them in Node.js using N-API.
+> This module uses the C APIs libheif to bind it in Node.js using N-API.
 
 ## ⭐ Introduction
 
