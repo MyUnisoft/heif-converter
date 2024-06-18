@@ -1,0 +1,32 @@
+{
+  "name": "@myunisoft/heif-converter.linux-x64",
+  "version": "0.0.1",
+  "description": "Prebuilt heif-converter for use with linux x64",
+  "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
+  "homepage": "https://gitlab.com/myunisoft/back/packages/heif-converter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/myunisoft/back/packages/heif-converter.git",
+    "directory": "workspaces/linux-x64"
+  },
+  "license": "MIT",
+  "preferUnplugged": true,
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "@myunisoft:registry": "https://gitlab.com/api/v4/projects/58113847/packages/npm/"
+  },
+  "exports": {
+    "./heif-converter.node": "./lib/heif-converter.linux-x64.node"
+  },
+  "engines": {
+    "node": ">=20.x"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}

@@ -1,0 +1,1 @@
+# `Compiled files for heif-converter windows x64`

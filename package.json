@@ -1,0 +1,55 @@
+{
+  "name": "@myunisoft/heif-converter",
+  "description": "Bindings for the libheif C API to convert an image in Node.js",
+  "version": "0.0.1",
+  "keywords": [
+    "heif",
+    "heic",
+    "convert",
+    "converter",
+    "image",
+    "jpeg",
+    "jpg"
+  ],
+  "engines": {
+    "node": ">=20.x"
+  },
+  "gypfile": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MyUnisoft/heif-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MyUnisoft/heif-converter/issues"
+  },
+  "homepage": "https://github.com/MyUnisoft/heif-converter",
+  "types": "index.d.ts",
+  "main": "index.js",
+  "scripts": {
+    "build": "prebuildify --napi",
+    "test": "node --test test/test.spec.js"
+  },
+  "publishConfig": {
+    "@myunisoft:registry": "https://registry.npmjs.org/"
+  },
+  "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "docs/"
+  ],
+  "devDependencies": {
+    "@nodesecure/eslint-config": "^1.9.0",
+    "file-type": "^19.0.0",
+    "heic-convert": "^2.1.0",
+    "node-addon-api": "^8.0.0",
+    "node-gyp": "^10.1.0",
+    "prebuildify": "^6.0.1",
+    "tinybench": "^2.8.0"
+  },
+  "optionalDependencies": {
+    "@myunisoft/heif-converter.linux-x64": "^0.0.1",
+    "@myunisoft/heif-converter.win32-x64": "^0.0.1"
+  }
+}

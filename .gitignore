@@ -1,0 +1,9 @@
+build
+node_modules
+.env
+dist
+temp
+.vscode
+npm/*/*
+!npm/*/package.json
+!npm/*/README.md
