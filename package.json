@@ -26,7 +26,6 @@
   "types": "index.d.ts",
   "main": "index.js",
   "scripts": {
-    "build": "prebuildify --napi",
     "test": "node --test test/test.spec.js"
   },
   "publishConfig": {
@@ -45,7 +44,6 @@
     "heic-convert": "^2.1.0",
     "node-addon-api": "^8.0.0",
     "node-gyp": "^10.1.0",
-    "prebuildify": "^6.0.1",
     "tinybench": "^2.8.0"
   },
   "optionalDependencies": {
