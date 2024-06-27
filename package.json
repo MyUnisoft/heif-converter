@@ -49,5 +49,9 @@
   "optionalDependencies": {
     "@myunisoft/heif-converter.linux-x64": "^0.0.1",
     "@myunisoft/heif-converter.win32-x64": "^0.0.1"
-  }
+  },
+  "workspaces": [
+    "npm/linux-x64",
+    "npm/win32-x64"
+  ]
 }
