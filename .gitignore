@@ -7,3 +7,4 @@ temp
 npm/*/*
 !npm/*/package.json
 !npm/*/README.md
+!npm/*/Dockerfile
