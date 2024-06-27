@@ -18,10 +18,10 @@
     "@myunisoft:registry": "https://registry.npmjs.org/"
   },
   "exports": {
-    "./heif-converter.node": "./lib/heif-converter.win32-x64.node"
+    "./converter.node": "./lib/converter.win32-x64.node"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": ">=16.x"
   },
   "os": [
     "win32"
