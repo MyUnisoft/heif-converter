@@ -1,13 +1,12 @@
 {
   "targets": [
     {
-      "target_name": "heifConverter",
+      "target_name": "converter",
       "sources": [
-        "./src/lib.cc"
+        "lib.cc"
       ],
       "include_dirs": [
-        "<!(node -p \"require('node-addon-api').include\")",
-        "include"
+        "<!(node -p \"require('node-addon-api').include_dir\")",
       ],
       "dependencies": [
         "<!(node -p \"require('node-addon-api').gyp\")"
@@ -23,7 +22,7 @@
               "conditions": [
                 [
                   "\"<!(echo $VCPKG_LIB_ROOT)\" == \"\"", {
-                    "VCPKG_LIB_ROOT%": "/vcpkg/installed/<!(node env.js platform)"
+                    "VCPKG_LIB_ROOT%": "/vcpkg/installed/x64-linux"
                   }
                 ]
               ]
@@ -33,8 +32,7 @@
               "<(VCPKG_LIB_ROOT)/lib/libturbojpeg.a",
               "<(VCPKG_LIB_ROOT)/lib/libpng16.a",
               "<(VCPKG_LIB_ROOT)/lib/libde265.a",
-              "<(VCPKG_LIB_ROOT)/lib/libx265.a",
-              "<(VCPKG_LIB_ROOT)/lib/libaom.a"
+              "<(VCPKG_LIB_ROOT)/lib/libx265.a"
             ],
             "include_dirs": [
               "<(VCPKG_LIB_ROOT)/include",
@@ -46,11 +44,11 @@
         [
           "OS==\"win\"", {
             "variables": {
-              "VCPKG_LIB_ROOT%": "<!(node env.js env)",
+              "VCPKG_LIB_ROOT%": "<!(node -e \"console.log(process.env.VCPKG_LIB_ROOT)\")",
               "conditions": [
                 [
-                  "\"<!(node env.js env)\" == \"\"", {
-                    "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/<!(node env.js platform)"
+                  "\"<!(node -e \"console.log(process.env.VCPKG_LIB_ROOT)\")\" == \"undefined\"", {
+                    "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x64-windows"
                   }
                 ]
               ]
@@ -72,7 +70,7 @@
             ],
             "copies": [
               {
-                "destination": "<(module_root_dir)/prebuilds/win32-x64",
+                "destination": "<(module_root_dir)/build/Release",
                 "files": [
                   "<(VCPKG_LIB_ROOT)/bin/heif.dll",
                   "<(VCPKG_LIB_ROOT)/bin/turbojpeg.dll",

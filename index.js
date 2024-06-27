@@ -5,7 +5,24 @@ const fs = require("node:fs");
 // CONSTANTS
 const { arch, platform } = process;
 const kPlatform = `${platform}-${arch}`;
-const lib = require(`@myunisoft/heif-converter.${kPlatform}/heif-converter.node`);
+
+const binaryPaths = [
+  `@myunisoft/heif-converter.${kPlatform}/converter.node`,
+  `./src/build/Release/converter.node`
+];
+let lib = null;
+for (const binaryPath of binaryPaths) {
+  try {
+    lib = require(binaryPath);
+  }
+  catch {
+    // Do nothing
+  }
+}
+
+if (lib === null) {
+  throw new Error(`You cannot use heif-converter on the following platform: ${kPlatform}`);
+}
 
 async function getBufferFromInput(input) {
   let stream = input;
