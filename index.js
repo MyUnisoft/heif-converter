@@ -11,17 +11,21 @@ const binaryPaths = [
   `./src/build/Release/converter.node`
 ];
 let lib = null;
+const errors = [];
 for (const binaryPath of binaryPaths) {
   try {
     lib = require(binaryPath);
   }
-  catch {
-    // Do nothing
+  catch (error) {
+    errors.push(error);
   }
 }
 
 if (lib === null) {
-  throw new Error(`You cannot use heif-converter on the following platform: ${kPlatform}`);
+  const errorMessages = errors.map((error) => error.message);
+  errorMessages.unshift(`You cannot use heif-converter on the following platform: ${kPlatform}`);
+
+  throw new Error(errorMessages.join("\n"));
 }
 
 async function getBufferFromInput(input) {
