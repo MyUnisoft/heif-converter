@@ -1,5 +1,5 @@
 {
-  "name": "@myunisoft/heif-converter.linux-x64",
+  "name": "@myunisoft/heif-converter.linuxmusl-x64",
   "version": "0.0.4",
   "description": "Prebuilt heif-converter for use with linux x64",
   "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MyUnisoft/heif-converter.git",
-    "directory": "npm/linux-x64"
+    "directory": "npm/linuxmusl-x64"
   },
   "license": "MIT",
   "preferUnplugged": true,
@@ -18,7 +18,7 @@
     "@myunisoft:registry": "https://registry.npmjs.org/"
   },
   "exports": {
-    "./converter.node": "./lib/converter.linux-x64.node"
+    "./converter.node": "./lib/converter.linuxmusl-x64.node"
   },
   "engines": {
     "node": ">=16.x"
@@ -30,6 +30,6 @@
     "x64"
   ],
   "libc": [
-    "glibc"
+    "musl"
   ]
 }
