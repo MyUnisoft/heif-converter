@@ -1,7 +1,7 @@
 {
   "name": "@myunisoft/heif-converter",
   "description": "Bindings for the libheif C API to convert an image in Node.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "heif",
     "heic",
@@ -47,7 +47,8 @@
     "tinybench": "^2.8.0"
   },
   "optionalDependencies": {
-    "@myunisoft/heif-converter.linux-x64": "^0.0.3",
-    "@myunisoft/heif-converter.win32-x64": "^0.0.3"
+    "@myunisoft/heif-converter.linux-x64": "^0.0.4",
+    "@myunisoft/heif-converter.linuxmusl-x64": "^0.0.4",
+    "@myunisoft/heif-converter.win32-x64": "^0.0.4"
   }
 }
