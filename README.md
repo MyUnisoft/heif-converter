@@ -11,11 +11,10 @@ The **libheif** library is a software library used to read and write HEIF (High 
 
 HEIF is a file format for images and image sequences (like photos and videos) that offers superior compression compared to traditional formats like JPEG and PNG while maintaining high image quality.
 
-For more information about the libraries used in this project, you can visit the following links:
+For more information about the librarie used in this project, you can visit the following links:
 * [libheif](https://github.com/strukturag/libheif/tree/master)
 * [libjpeg](https://github.com/winlibs/libjpeg)
 * [libpng](https://github.com/pnggroup/libpng)
-* [aom](https://github.com/mozilla/aom)
 
 ## ❤️ Motivations
 
@@ -40,7 +39,7 @@ npm install heif-converter
 ```
 
 ## 🚀 API
-### toJpeg
+- ### toJpeg
 
 The **toJpeg** method converts the primary image of a HEIC file to **jpg**.
 
@@ -62,7 +61,7 @@ const jpegBuffer = await lib.toJpeg("image.heic", { quality: 20 });
 ```
 > The value of the quality option is from 0 to 100. Default 75.
 
-### toPng
+- ### toPng
 
 The **toPng** method converts the primary image of a HEIC file to **png**.
 ```ts
@@ -75,7 +74,7 @@ const pngBuffer = await lib.toPng("image.heic", { compression: 5 });
 ```
 > The value of the compression` option is from 1 to 9. Default 1.
 
-### extract
+- ### extract
 
 The **extract** method allows you to obtain a list of images contained in a HEIC file. Each extracted image has two methods, **toJpeg** and **toPng**, which allow you to convert the image to JPEG or PNG format, respectively, as documented above.
 ```ts
@@ -116,36 +115,39 @@ $ node ./bench/bench.js 3
 This benchmark was conducted on a mid-range machine
 
 #### HEIC file containing an image of 3992*2992.
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | JPEG         | 0.45    | 2218              |
-| heif-converter | JPEG         | 3.21    | 312               |
-
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | PNG          | 0.28    | 3460              |
-| heif-converter | PNG          | 0.78    | 1274              |
+```
+┌─────────┬──────────────────────────┬─────────┬────────────────────┬──────────┬─────────┐
+│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin   │ Samples │
+├─────────┼──────────────────────────┼─────────┼────────────────────┼──────────┼─────────┤
+│ 0       │ 'JPG ==> heif-converter' │ '5'     │ 168399799.99999997 │ '±1.24%' │ 10      │
+│ 1       │ 'JPG ==> heic-convert'   │ '0'     │ 1094995630.0000002 │ '±0.63%' │ 10      │
+│ 2       │ 'PNG ==> heif-converter' │ '1'     │ 715495539.9999995  │ '±0.18%' │ 10      │
+│ 3       │ 'PNG ==> heic-convert'   │ '0'     │ 1691614560.0000005 │ '±0.47%' │ 10      │
+└─────────┴──────────────────────────┴─────────┴────────────────────┴──────────┴─────────┘
+```
 
 
 #### HEIC file containing an image of 2400*1600.
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | JPEG         | 1.79    | 220               |
-| heif-converter | JPEG         | 4.55    | 559               |
-
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | PNG          | 1.16    | 366               |
-| heif-converter | PNG          | 2.73    | 863               |
+```
+┌─────────┬──────────────────────────┬─────────┬────────────────────┬──────────┬─────────┐
+│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin   │ Samples │
+├─────────┼──────────────────────────┼─────────┼────────────────────┼──────────┼─────────┤
+│ 0       │ 'JPG ==> heif-converter' │ '9'     │ 107019470.00000027 │ '±0.67%' │ 10      │
+│ 1       │ 'JPG ==> heic-convert'   │ '3'     │ 287341830.0000001  │ '±1.53%' │ 10      │
+│ 2       │ 'PNG ==> heif-converter' │ '5'     │ 188958699.9999996  │ '±1.03%' │ 10      │
+│ 3       │ 'PNG ==> heic-convert'   │ '2'     │ 407586150.0000004  │ '±0.96%' │ 10      │
+└─────────┴──────────────────────────┴─────────┴────────────────────┴──────────┴─────────┘
+```
 
 
 #### HEIC file containing an image of 640*426.
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | JPEG         | 16.79   | 559               |
-| heif-converter | JPEG         | 56.07   | 220               |
-
-| Module         | Convert      | ops/sec | Average Time (ms) |
-|----------------|:------------:|:-------:|:-----------------:|
-| heic-convert   | PNG          | 13.60   | 863               |
-| heif-converter | PNG          | 33.85   | 366               |
+```
+┌─────────┬──────────────────────────┬─────────┬────────────────────┬───────────┬─────────┐
+│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin    │ Samples │
+├─────────┼──────────────────────────┼─────────┼────────────────────┼───────────┼─────────┤
+│ 0       │ 'JPG ==> heif-converter' │ '108'   │ 9191369.090909092  │ '±0.88%'  │ 55      │
+│ 1       │ 'JPG ==> heic-convert'   │ '31'    │ 31666893.749999985 │ '±10.25%' │ 16      │
+│ 2       │ 'PNG ==> heif-converter' │ '66'    │ 15030594.117647083 │ '±1.22%'  │ 34      │
+│ 3       │ 'PNG ==> heic-convert'   │ '31'    │ 31297225.000000026 │ '±2.71%'  │ 16      │
+└─────────┴──────────────────────────┴─────────┴────────────────────┴───────────┴─────────┘
+```
