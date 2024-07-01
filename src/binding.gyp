@@ -22,7 +22,7 @@
               "conditions": [
                 [
                   "\"<!(echo $VCPKG_LIB_ROOT)\" == \"\"", {
-                    "VCPKG_LIB_ROOT%": "/opt/app-root/src/vcpkg/installed/x64-linux"
+                    "VCPKG_LIB_ROOT%": "/vcpkg/installed/x64-linux"
                   }
                 ]
               ]
