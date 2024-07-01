@@ -1,6 +1,6 @@
 {
   "name": "@myunisoft/heif-converter-ws",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": "true",
   "workspaces": [
     "linux-x64",
