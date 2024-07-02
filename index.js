@@ -2,9 +2,13 @@
 const { Readable } = require("node:stream");
 const fs = require("node:fs");
 
+// Import Third-Party Dependencies
+const { familySync, MUSL } = require("detect-libc");
+
 // CONSTANTS
 const { arch, platform } = process;
-const kPlatform = `${platform}-${arch}`;
+const compiler = familySync() === MUSL ? "musl" : "";
+const kPlatform = `${platform}${compiler}-${arch}`;
 
 const binaryPaths = [
   `@myunisoft/heif-converter.${kPlatform}/converter.node`,
