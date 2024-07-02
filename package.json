@@ -50,5 +50,8 @@
     "@myunisoft/heif-converter.linux-x64": "^0.0.4",
     "@myunisoft/heif-converter.linuxmusl-x64": "^0.0.4",
     "@myunisoft/heif-converter.win32-x64": "^0.0.4"
+  },
+  "dependencies": {
+    "detect-libc": "^2.0.3"
   }
 }
