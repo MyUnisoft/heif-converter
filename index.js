@@ -52,11 +52,10 @@ async function getBufferFromInput(input) {
 module.exports = {
   async toJpeg(input, options = { quality: 75 }) {
     const buffer = await getBufferFromInput(input);
-    const [id] = lib.extractIds(buffer);
 
     return await new Promise((res, rej) => lib.toJpeg(
       buffer,
-      id,
+      undefined,
       options,
       (err, data) => (err ? rej(err) : res(data))
     ));
@@ -64,11 +63,10 @@ module.exports = {
 
   async toPng(input, options = { compression: 1 }) {
     const buffer = await getBufferFromInput(input);
-    const [id] = lib.extractIds(buffer);
 
     return await new Promise((res, rej) => lib.toPng(
       buffer,
-      id,
+      undefined,
       options,
       (err, data) => (err ? rej(err) : res(data))
     ));

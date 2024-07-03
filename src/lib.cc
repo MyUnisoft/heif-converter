@@ -28,7 +28,12 @@ public:
         }
 
         struct heif_image_handle* handle;
-        err = heif_context_get_image_handle(ctx, imageId, &handle);
+        if (imageId == -1) {
+            err = heif_context_get_primary_image_handle(ctx, &handle);
+        } else {
+            err = heif_context_get_image_handle(ctx, imageId, &handle);
+        }
+
         if (err.code != heif_error_Ok) {
             heif_context_free(ctx);
             SetError("Failed to get image handle: " + std::string(err.message));
@@ -113,7 +118,12 @@ public:
         }
 
         struct heif_image_handle* handle;
-        err = heif_context_get_image_handle(ctx, imageId, &handle);
+        if (imageId == -1) {
+            err = heif_context_get_primary_image_handle(ctx, &handle);
+        } else {
+            err = heif_context_get_image_handle(ctx, imageId, &handle);
+        }
+
         if (err.code != heif_error_Ok) {
             heif_context_free(ctx);
             SetError("Failed to get image handle: " + std::string(err.message));
@@ -210,7 +220,12 @@ private:
 Napi::Value ToJpeg(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
     Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
-    heif_item_id imageId = info[1].As<Napi::Number>().Uint32Value();
+
+    heif_item_id imageId = -1;
+    if (!info[1].IsUndefined()) {
+        imageId = info[1].As<Napi::Number>().Uint32Value();
+    }
+
     Napi::Object options = info[2].As<Napi::Object>();
     Napi::Function callback = info[3].As<Napi::Function>();
 
@@ -222,7 +237,12 @@ Napi::Value ToJpeg(const Napi::CallbackInfo& info) {
 Napi::Value ToPng(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
     Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
-    heif_item_id imageId = info[1].As<Napi::Number>().Uint32Value();
+    
+    heif_item_id imageId = -1;
+    if (!info[1].IsUndefined()) {
+        imageId = info[1].As<Napi::Number>().Uint32Value();
+    }
+
     Napi::Object options = info[2].As<Napi::Object>();
     Napi::Function callback = info[3].As<Napi::Function>();
 
