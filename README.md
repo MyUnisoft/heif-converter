@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./docs/heif-converter.jpg"/>
+<img src="./docs/images/heif-converter.jpg"/>
 </p>
 
 # 🥦 HEIF-Converter
@@ -39,9 +39,12 @@ npm install heif-converter
 ```
 
 ## 🚀 API
-- ### toJpeg
+<details>
+<summary>toJpeg</summary>
+<br>
 
 The **toJpeg** method converts the primary image of a HEIC file to **jpg**.
+> Converts only the primary image of the HEIC file.
 
 ```ts
 interface JpegOptions {
@@ -61,9 +64,14 @@ const jpegBuffer = await lib.toJpeg("image.heic", { quality: 20 });
 ```
 > The value of the quality option is from 0 to 100. Default 75.
 
-- ### toPng
+</details>
+<details>
+<summary>toPng</summary>
+<br>
 
 The **toPng** method converts the primary image of a HEIC file to **png**.
+> Converts only the primary image of the HEIC file.
+
 ```ts
 function toPng(input: string | Buffer | Readable): Promise<Buffer>;
 ```
@@ -74,7 +82,10 @@ const pngBuffer = await lib.toPng("image.heic", { compression: 5 });
 ```
 > The value of the compression` option is from 1 to 9. Default 1.
 
-- ### extract
+</details>
+<details>
+<summary>extract</summary>
+<br>
 
 The **extract** method allows you to obtain a list of images contained in a HEIC file. Each extracted image has two methods, **toJpeg** and **toPng**, which allow you to convert the image to JPEG or PNG format, respectively, as documented above.
 ```ts
@@ -102,52 +113,25 @@ for (image of images) {
 }
 ```
 
+</details>
+
 ## Benchmark
 
-The benchmark is accessible in the ./bench folder. You can run the following commands.
+The benchmark is accessible in the ./benchmark folder. You can run the following commands.
 ```bash
-$ node ./bench/bench.js 1
+$ node ./benchmark/bench.js 1
 # OR
-$ node ./bench/bench.js 2
+$ node ./benchmark/bench.js 2
 # OR
-$ node ./bench/bench.js 3
+$ node ./benchmark/bench.js 3
 ```
-This benchmark was conducted on a mid-range machine
+This benchmark was conducted on a mid-range machine.
 
 #### HEIC file containing an image of 3992*2992.
-```
-┌─────────┬──────────────────────────┬─────────┬────────────────────┬──────────┬─────────┐
-│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin   │ Samples │
-├─────────┼──────────────────────────┼─────────┼────────────────────┼──────────┼─────────┤
-│ 0       │ 'JPG ==> heif-converter' │ '5'     │ 168399799.99999997 │ '±1.24%' │ 10      │
-│ 1       │ 'JPG ==> heic-convert'   │ '0'     │ 1094995630.0000002 │ '±0.63%' │ 10      │
-│ 2       │ 'PNG ==> heif-converter' │ '1'     │ 715495539.9999995  │ '±0.18%' │ 10      │
-│ 3       │ 'PNG ==> heic-convert'   │ '0'     │ 1691614560.0000005 │ '±0.47%' │ 10      │
-└─────────┴──────────────────────────┴─────────┴────────────────────┴──────────┴─────────┘
-```
-
+<img src="./docs/images/bench1.png"/>
 
 #### HEIC file containing an image of 2400*1600.
-```
-┌─────────┬──────────────────────────┬─────────┬────────────────────┬──────────┬─────────┐
-│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin   │ Samples │
-├─────────┼──────────────────────────┼─────────┼────────────────────┼──────────┼─────────┤
-│ 0       │ 'JPG ==> heif-converter' │ '9'     │ 107019470.00000027 │ '±0.67%' │ 10      │
-│ 1       │ 'JPG ==> heic-convert'   │ '3'     │ 287341830.0000001  │ '±1.53%' │ 10      │
-│ 2       │ 'PNG ==> heif-converter' │ '5'     │ 188958699.9999996  │ '±1.03%' │ 10      │
-│ 3       │ 'PNG ==> heic-convert'   │ '2'     │ 407586150.0000004  │ '±0.96%' │ 10      │
-└─────────┴──────────────────────────┴─────────┴────────────────────┴──────────┴─────────┘
-```
-
+<img src="./docs/images/bench2.png"/>
 
 #### HEIC file containing an image of 640*426.
-```
-┌─────────┬──────────────────────────┬─────────┬────────────────────┬───────────┬─────────┐
-│ (index) │ Task Name                │ ops/sec │ Average Time (ns)  │ Margin    │ Samples │
-├─────────┼──────────────────────────┼─────────┼────────────────────┼───────────┼─────────┤
-│ 0       │ 'JPG ==> heif-converter' │ '108'   │ 9191369.090909092  │ '±0.88%'  │ 55      │
-│ 1       │ 'JPG ==> heic-convert'   │ '31'    │ 31666893.749999985 │ '±10.25%' │ 16      │
-│ 2       │ 'PNG ==> heif-converter' │ '66'    │ 15030594.117647083 │ '±1.22%'  │ 34      │
-│ 3       │ 'PNG ==> heic-convert'   │ '31'    │ 31297225.000000026 │ '±2.71%'  │ 16      │
-└─────────┴──────────────────────────┴─────────┴────────────────────┴───────────┴─────────┘
-```
+<img src="./docs/images/bench3.png"/>
