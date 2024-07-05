@@ -26,7 +26,8 @@
   "types": "index.d.ts",
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/test.spec.js"
+    "test": "node --test test/test.spec.js",
+    "build": "node-gyp configure --directory=src && node-gyp build --directory=src"
   },
   "publishConfig": {
     "@myunisoft:registry": "https://registry.npmjs.org/"
