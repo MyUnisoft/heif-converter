@@ -41,7 +41,7 @@ jobs:
     - name: Build with Docker (${{ matrix.platform }})
       if: contains(matrix.os, 'ubuntu')
       run: |
-        docker build --build-arg PLATFORM=${{ matrix.platform }} --build-arg LIBHEIF_V=v1.17.6 -t test . -f ./platform/Dockerfile
+        docker build --build-arg PLATFORM=${{ matrix.platform }} --build-arg LIBHEIF_V=v1.17.6 -t ${{ matrix.platform }} . -f ./platform/Dockerfile
         docker run --name ${{ matrix.platform }} ${{ matrix.platform }}
         docker cp ${{ matrix.platform }}:/heif-converter/src/build/Release/converter.node ./release/converter.${{ matrix.platform }}.node
         docker container rm ${{ matrix.platform }}

@@ -1,4 +1,5 @@
 FROM node:16-alpine
+LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"
 
 ENV VCPKG_FORCE_SYSTEM_BINARIES 1
 RUN apk --no-cache add \
@@ -35,14 +36,3 @@ RUN git clone https://github.com/ninja-build/ninja.git /tmp/ninja \
 RUN git clone https://github.com/microsoft/vcpkg.git && \
     ./vcpkg/bootstrap-vcpkg.sh && \
     ./vcpkg/vcpkg install libheif
-
-WORKDIR heif-converter
-
-COPY . .
-
-RUN npm install -g node-gyp && \
-    npm install && \
-    node-gyp configure -C src && \
-    node-gyp build -C src
-
-CMD ["/bin/sh"]
