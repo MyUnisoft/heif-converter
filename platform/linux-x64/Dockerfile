@@ -1,8 +1,9 @@
 FROM debian:buster
+LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"
 USER root
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     build-essential \
     curl \
     git \
@@ -17,20 +18,9 @@ RUN apt-get install -y \
     python3-mako \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
 RUN git clone https://github.com/microsoft/vcpkg.git && \
     ./vcpkg/bootstrap-vcpkg.sh && \
     ./vcpkg/vcpkg install libheif
-
-WORKDIR heif-converter
-
-COPY . .
-
-RUN npm install -g node-gyp && \
-    npm install && \
-    node-gyp configure --directory=src && \
-    node-gyp build --directory=src
-
-CMD ["/bin/bash"]
