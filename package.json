@@ -27,7 +27,9 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test test/test.spec.js",
-    "build": "node-gyp configure --directory=src && node-gyp build --directory=src"
+    "clear": "rimraf src/build src/node_modules",
+    "configure": "node-gyp configure --directory=src",
+    "build": "node-gyp build --directory=src"
   },
   "publishConfig": {
     "@myunisoft:registry": "https://registry.npmjs.org/"
@@ -45,6 +47,7 @@
     "heic-convert": "^2.1.0",
     "node-addon-api": "^8.0.0",
     "node-gyp": "^10.1.0",
+    "rimraf": "^6.0.1",
     "tinybench": "^2.8.0"
   },
   "optionalDependencies": {

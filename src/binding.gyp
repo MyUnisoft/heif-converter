@@ -16,12 +16,12 @@
       "defines": [ "NAPI_CPP_EXCEPTIONS" ],
       "conditions": [
         [
-          "OS==\"linux\"", {
+          'OS=="linux"', {
             "variables": {
               "VCPKG_LIB_ROOT%": "<!(echo $VCPKG_LIB_ROOT)",
               "conditions": [
                 [
-                  "\"<!(echo $VCPKG_LIB_ROOT)\" == \"\"", {
+                  '"<!(echo $VCPKG_LIB_ROOT)" == ""', {
                     "VCPKG_LIB_ROOT%": "/vcpkg/installed/x64-linux"
                   }
                 ]
@@ -42,17 +42,42 @@
           }
         ],
         [
-          "OS==\"win\"", {
-            "variables": {
-              "VCPKG_LIB_ROOT%": "<!(node -e \"console.log(process.env.VCPKG_LIB_ROOT)\")",
-              "conditions": [
-                [
-                  "\"<!(node -e \"console.log(process.env.VCPKG_LIB_ROOT)\")\" == \"undefined\"", {
-                    "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x64-windows"
+          'OS=="win"',
+          {
+            "conditions": [
+              [
+                'target_arch=="x64"',
+                {
+                  "variables": {
+                    "VCPKG_LIB_ROOT%": '<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")',
+                    "conditions": [
+                      [
+                        '"<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")" == "undefined"',
+                        {
+                          "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x64-windows"
+                        }
+                      ]
+                    ]
                   }
-                ]
+                }
+              ],
+              [
+                'target_arch=="ia32"',
+                {
+                  "variables": {
+                    "VCPKG_LIB_ROOT%": '<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")',
+                    "conditions": [
+                      [
+                        '"<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")" == "undefined"',
+                        {
+                          "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x86-windows"
+                        }
+                      ]
+                    ]
+                  }
+                }
               ]
-            },
+            ],
             "msvs_settings": {
               "VCCLCompilerTool": {
                 "ExceptionHandling": 1

@@ -15,13 +15,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            platform: linuxmusl-x64
+            platform: linuxmusl
+            arch: x64
           - os: ubuntu-22.04
-            platform: linux-x64
-          - os: macos-11
-            platform: darwin-x64
+            platform: linux
+            arch: x64
+          # - os: macos-11
+          #   platform: darwin-x64
           - os: windows-2020
-            platform: windows-x64
+            platform: win32
+            arch: x64
+          - os: windows-2020
+            platform: win32
+            arch: ia32
 
     steps:
     - name: Checkout repository
@@ -38,34 +44,28 @@ jobs:
     - name: Create a folder for the tarball
       run: mkdir release
 
-    - name: Build with Docker (${{ matrix.platform }})
-      if: contains(matrix.os, 'ubuntu')
+    - name: Build with Docker (Windows)
+      if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
+      env:
+        PLATFORM: ${{ matrix.platform }}-${{ matrix.arch }}
       run: |
-        docker build --build-arg PLATFORM=${{ matrix.platform }} --build-arg LIBHEIF_V=v1.17.6 -t ${{ matrix.platform }} . -f ./platform/Dockerfile
-        docker run --name ${{ matrix.platform }} ${{ matrix.platform }}
-        docker cp ${{ matrix.platform }}:/heif-converter/src/build/Release/converter.node ./release/converter.${{ matrix.platform }}.node
-        docker container rm ${{ matrix.platform }}
+        # Build image
+        docker build --build-arg PLATFORM=${{ env.PLATFORM }} --build-arg ARCH=${{ matrix.arch }} -t ${{ env.PLATFORM }} . -f ./.github/Dockerfile
 
-    # - name: Build natively (Windows)
-    #   if: runner.os == 'Windows'
-    #   run: |
-    #     git clone https://github.com/microsoft/vcpkg.git
-    #     .\vcpkg\bootstrap-vcpkg.bat
-    #     .\vcpkg\vcpkg.exe install libheif
-    #     echo "::add-path::$(pwd)\vcpkg\installed\x64-windows\bin"
-    #     echo "::add-path::$(pwd)\vcpkg\installed\x64-windows\lib"
-    #     npm install -g node-gyp
-    #     node-gyp configure -C src
-    #     node-gyp build -C src
-    #     cp ./src/build/Release/converter.node ./src/build/Release/converter-windows-x64.node
+        # Run container and copy the built file
+        docker run --name ${{ env.PLATFORM }} ${{ env.PLATFORM }}
+        docker cp ${{ env.PLATFORM }}:C:/heif-converter/src/build/Release/converter.node ./release/converter.${{ env.PLATFORM }}.node
+
+        # Clean up the Docker container
+        docker container rm ${{ env.PLATFORM }}
 
     - name: Create tarball of the release folder
       run: |
         cd ./release
-        tar -czf ${{ matrix.platform }}.tar.gz *
+        tar -czf ${{ matrix.platform }}-${{ matrix.arch }}.tar.gz *
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: release
-        path: ./release/${{ matrix.platform }}.tar.gz
+        path: ./release/${{ matrix.platform }}-${{ matrix.arch }}.tar.gz
