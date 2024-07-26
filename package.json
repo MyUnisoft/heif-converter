@@ -1,7 +1,7 @@
 {
   "name": "@myunisoft/heif-converter",
   "description": "Bindings for the libheif C API to convert an image in Node.js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "keywords": [
     "heif",
     "heic",
