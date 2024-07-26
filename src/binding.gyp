@@ -16,12 +16,14 @@
       "defines": [ "NAPI_CPP_EXCEPTIONS" ],
       "conditions": [
         [
-          'OS=="linux"', {
+          'OS=="linux"', 
+          {
             "variables": {
               "VCPKG_LIB_ROOT%": "<!(echo $VCPKG_LIB_ROOT)",
               "conditions": [
                 [
-                  '"<!(echo $VCPKG_LIB_ROOT)" == ""', {
+                  '"<!(echo $VCPKG_LIB_ROOT)" == ""', 
+                  {
                     "VCPKG_LIB_ROOT%": "/vcpkg/installed/x64-linux"
                   }
                 ]

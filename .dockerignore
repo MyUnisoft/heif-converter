@@ -8,3 +8,5 @@ index.d.ts
 LICENSE
 README.md
 docker
+src/build
+src/node_modules
