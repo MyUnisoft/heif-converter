@@ -1,7 +1,7 @@
 {
   "name": "@myunisoft/heif-converter.win32-ia32",
   "version": "0.0.1",
-  "description": "Prebuilt heif-converter for use with Windows x64",
+  "description": "Prebuilt heif-converter for use with Windows x86",
   "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
   "homepage": "https://github.com/MyUnisoft/heif-converter",
   "repository": {
@@ -21,12 +21,12 @@
     "./converter.node": "./lib/converter.win32-ia32.node"
   },
   "engines": {
-    "node": ">=16.x"
+    "node": ">=18.x"
   },
   "os": [
     "win32"
   ],
   "cpu": [
-    "x64"
+    "ia32"
   ]
 }
