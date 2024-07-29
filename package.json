@@ -12,7 +12,7 @@
     "jpg"
   ],
   "engines": {
-    "node": ">=20.x"
+    "node": ">=18.x"
   },
   "gypfile": true,
   "repository": {
