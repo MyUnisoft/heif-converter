@@ -21,7 +21,7 @@
     "./converter.node": "./lib/converter.win32-x64.node"
   },
   "engines": {
-    "node": ">=16.x"
+    "node": ">=18.x"
   },
   "os": [
     "win32"
