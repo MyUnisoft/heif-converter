@@ -1,5 +1,4 @@
 ARG PLATFORM
-ARG ARCH
 
 FROM myunisoft91/heif-converter.$PLATFORM:v0.0.1
 LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"

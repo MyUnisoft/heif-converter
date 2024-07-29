@@ -38,9 +38,12 @@ jobs:
       run: npm install
 
     - name: Create a folder for the tarball
-      run: mkdir release
+      run: |
+        mkdir release
+        cd release
+        mkdir lib
 
-    - name: Build with Docker (Windows)
+    - name: Build and run Docker container
       if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
       run: |
         # Build image
@@ -48,12 +51,25 @@ jobs:
 
         # Run container and copy the built file
         docker run --name ${{ matrix.PLATFORM }} ${{ matrix.PLATFORM }}
-        
-        # Copy binary file from container
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/converter.${{ matrix.PLATFORM }}.node
 
-        # Clean up the Docker container
-        docker container rm ${{ matrix.PLATFORM }}
+        # Copy .node file from the container        
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/lib/converter.${{ matrix.PLATFORM }}.node
+    
+    - name: Copy .dll files from the container (Windows)
+      env:
+        SRC_PATH: /heif-converter/src/build/Release
+      if: contains(matrix.os, 'windows')
+      run: |
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/heif.dll ./release/lib/heif.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/turbojpeg.dll ./release/lib/turbojpeg.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/jpeg62.dll ./release/lib/jpeg62.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libde265.dll ./release/lib/libde265.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libx265.dll ./release/lib/libx265.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libpng16.dll ./release/lib/libpng16.dll
+        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/zlib1.dll ./release/lib/zlib1.dll
+
+    - name: Clean up the Docker container
+      run: docker container rm ${{ matrix.PLATFORM }}
 
     - name: Create tarball of the release folder
       run: |
