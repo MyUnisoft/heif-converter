@@ -1,6 +1,6 @@
 {
   "name": "@myunisoft/heif-converter.win32-x64",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Prebuilt heif-converter for use with Windows x64",
   "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
   "homepage": "https://github.com/MyUnisoft/heif-converter",
