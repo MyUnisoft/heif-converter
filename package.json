@@ -51,9 +51,9 @@
     "tinybench": "^2.8.0"
   },
   "optionalDependencies": {
-    "@myunisoft/heif-converter.linux-x64": "^0.0.4",
-    "@myunisoft/heif-converter.linuxmusl-x64": "^0.0.4",
-    "@myunisoft/heif-converter.win32-x64": "^0.0.4",
+    "@myunisoft/heif-converter.linux-x64": "^0.1.0",
+    "@myunisoft/heif-converter.linuxmusl-x64": "^0.1.0",
+    "@myunisoft/heif-converter.win32-x64": "^0.1.0",
     "@myunisoft/heif-converter.win32-ia32": "^0.0.1"
   },
   "dependencies": {
