@@ -1,0 +1,32 @@
+{
+  "name": "@myunisoft/heif-converter.win32-ia32",
+  "version": "0.0.1",
+  "description": "Prebuilt heif-converter for use with Windows x64",
+  "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
+  "homepage": "https://github.com/MyUnisoft/heif-converter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MyUnisoft/heif-converter.git",
+    "directory": "npm/win32-ia32"
+  },
+  "license": "MIT",
+  "preferUnplugged": true,
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "@myunisoft:registry": "https://registry.npmjs.org/"
+  },
+  "exports": {
+    "./converter.node": "./lib/converter.win32-ia32.node"
+  },
+  "engines": {
+    "node": ">=16.x"
+  },
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}
