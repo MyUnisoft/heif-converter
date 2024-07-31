@@ -44,6 +44,37 @@
           }
         ],
         [
+          'OS=="mac"', 
+          {
+            "variables": {
+              "VCPKG_LIB_ROOT%": "<!(echo $VCPKG_LIB_ROOT)",
+              "conditions": [
+                [
+                  '"<!(echo $VCPKG_LIB_ROOT)" == ""', 
+                  {
+                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../vcpkg/installed/x64-osx"
+                  }
+                ]
+              ]
+            },
+            "libraries": [
+              "<(VCPKG_LIB_ROOT)/lib/libheif.a",
+              "<(VCPKG_LIB_ROOT)/lib/libturbojpeg.a",
+              "<(VCPKG_LIB_ROOT)/lib/libpng16.a",
+              "<(VCPKG_LIB_ROOT)/lib/libde265.a",
+              "<(VCPKG_LIB_ROOT)/lib/libx265.a"
+            ],
+            "include_dirs": [
+              "<(VCPKG_LIB_ROOT)/include",
+              "<(VCPKG_LIB_ROOT)/include/libheif"
+            ],
+            'xcode_settings': {
+              'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+              'GCC_SYMBOLS_PRIVATE_EXTERN': 'YES'
+            },
+          }
+        ],
+        [
           'OS=="win"',
           {
             "conditions": [
