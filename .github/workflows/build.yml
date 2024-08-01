@@ -1,12 +1,8 @@
 name: Build and Retrieve Compiled Files
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened, synchronize]
 
 jobs:
   build:
@@ -14,23 +10,23 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
-            platform: linuxmusl-x64
-          - os: ubuntu-22.04
-            platform: linux-x64
-          # - os: macos-11
-          #   platform: darwin-x64
-          - os: windows-latest
-            platform: win32-x64
-          - os: windows-latest
-            platform: win32-ia32
+          # - os: ubuntu-22.04
+          #   platform: linuxmusl-x64
+          # - os: ubuntu-22.04
+          #   platform: linux-x64
+          - os: macos-12
+            platform: darwin-x64
+          # - os: windows-latest
+          #   platform: win32-x64
+          # - os: windows-latest
+          #   platform: win32-ia32
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
 
@@ -56,9 +52,9 @@ jobs:
         docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/lib/converter.${{ matrix.PLATFORM }}.node
     
     - name: Copy .dll files from the container (Windows)
+      if: contains(matrix.os, 'windows')
       env:
         SRC_PATH: /heif-converter/src/build/Release
-      if: contains(matrix.os, 'windows')
       run: |
         docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/heif.dll ./release/lib/heif.dll
         docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/turbojpeg.dll ./release/lib/turbojpeg.dll
@@ -68,8 +64,33 @@ jobs:
         docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libpng16.dll ./release/lib/libpng16.dll
         docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/zlib1.dll ./release/lib/zlib1.dll
 
-    - name: Clean up the Docker container
+    - name: Clean up the Docker container (Windows and Linux)
+      if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
       run: docker container rm ${{ matrix.PLATFORM }}
+
+    - name: Configure and Build on OSX
+      if: contains(matrix.os, 'mac')
+      run: |
+        # Install nasm (useful for vcpkg)
+        brew install nasm
+
+        # Install python setup tools
+        pip3 install setuptools
+
+        # Clone vcpkg and install libheif
+        git clone https://github.com/microsoft/vcpkg.git
+        ./vcpkg/bootstrap-vcpkg.sh
+        ./vcpkg/vcpkg install libheif
+
+        # Build project
+        npm run configure
+        npm run build
+
+        # Run tests
+        # npm run test
+
+        # Copy .node in the release folder
+        cp ./src/build/Release/converter.node ./release/lib/converter.${{ matrix.PLATFORM }}.node
 
     - name: Create tarball of the release folder
       run: |
