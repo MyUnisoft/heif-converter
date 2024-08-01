@@ -1,0 +1,32 @@
+{
+  "name": "@myunisoft/heif-converter.darwin-x64",
+  "version": "0.0.1",
+  "description": "Prebuilt heif-converter for use with macOs x64",
+  "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
+  "homepage": "https://github.com/MyUnisoft/heif-converter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MyUnisoft/heif-converter.git",
+    "directory": "npm/darwin-x64"
+  },
+  "license": "MIT",
+  "preferUnplugged": true,
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "@myunisoft:registry": "https://registry.npmjs.org/"
+  },
+  "exports": {
+    "./converter.node": "./lib/converter.darwin-x64.node"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}
