@@ -5,7 +5,7 @@ LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"
 
 WORKDIR heif-converter
 COPY . .
-RUN npm install
+RUN npm install --omit-optional
 RUN npm run configure -- --target=v18.12.0
 RUN npm run build -- --target=v18.12.0
 RUN npm run test

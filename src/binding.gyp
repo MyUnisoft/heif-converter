@@ -52,7 +52,7 @@
                 [
                   '"<!(echo $VCPKG_LIB_ROOT)" == ""', 
                   {
-                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../vcpkg/installed/x64-osx"
+                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/darwin-x64"
                   }
                 ]
               ]
