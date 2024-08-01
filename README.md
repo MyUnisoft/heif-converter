@@ -30,7 +30,7 @@ Before installing **heif-converter**, make sure you have the following tools ins
 
 ## 🎈 Conversion
 The **heif-converter** package facilitates the conversion of HEIF (High Efficiency Image File Format) images to other formats. However, it's important to note that this package specifically handles static images and does not support animated images. Additionally, metadata and auxiliary images within the HEIF file are not currently supported by the converter. You're welcome to contribute by suggesting improvements or enhancements to its functionality 😃.
-> heif-converter does not work on macOS, only on Windows x64 and Linux x64. 
+> heif-converter runs on macOS x64, Windows x64/x86 and Linux x64. 
 
 ## 🦴 Installation
 
