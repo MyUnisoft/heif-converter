@@ -222,7 +222,7 @@ Napi::Value ToJpeg(const Napi::CallbackInfo& info) {
     Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
 
     heif_item_id imageId = -1;
-    if (!info[1].IsUndefined()) {
+    if (info[1].IsNumber()) {
         imageId = info[1].As<Napi::Number>().Uint32Value();
     }
 
@@ -239,7 +239,7 @@ Napi::Value ToPng(const Napi::CallbackInfo& info) {
     Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
     
     heif_item_id imageId = -1;
-    if (!info[1].IsUndefined()) {
+    if (info[1].IsNumber()) {
         imageId = info[1].As<Napi::Number>().Uint32Value();
     }
 

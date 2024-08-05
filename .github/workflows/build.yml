@@ -10,16 +10,16 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: ubuntu-22.04
-          #   platform: linuxmusl-x64
-          # - os: ubuntu-22.04
-          #   platform: linux-x64
-          - os: macos-12
-            platform: darwin-x64
-          # - os: windows-latest
-          #   platform: win32-x64
-          # - os: windows-latest
-          #   platform: win32-ia32
+          - os: ubuntu-22.04
+            platform: linuxmusl-x64
+          - os: ubuntu-22.04
+            platform: linux-x64
+          # - os: macos-12
+            # platform: darwin-x64
+          - os: windows-latest
+            platform: win32-x64
+          - os: windows-latest
+            platform: win32-ia32
 
     steps:
     - name: Checkout repository
@@ -31,7 +31,7 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --no-optional
 
     - name: Create a folder for the tarball
       run: |
