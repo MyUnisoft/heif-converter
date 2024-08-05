@@ -11,14 +11,16 @@ const compiler = familySync() === MUSL ? "musl" : "";
 const kPlatform = `${platform}${compiler}-${arch}`;
 
 const binaryPaths = [
-  `@myunisoft/heif-converter.${kPlatform}/converter.node`,
-  `./src/build/Release/converter.node`
+  `./src/build/Release/converter.node`,
+  `@myunisoft/heif-converter.${kPlatform}/converter.node`
 ];
 let lib = null;
 const errors = [];
 for (const binaryPath of binaryPaths) {
   try {
     lib = require(binaryPath);
+
+    break;
   }
   catch (error) {
     errors.push(error);
