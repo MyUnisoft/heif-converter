@@ -31,7 +31,7 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
-      run: npm install --no-optional
+      run: npm install --omit=optional
 
     - name: Create a folder for the tarball
       run: |
