@@ -52,6 +52,9 @@ async function getBufferFromInput(input) {
 }
 
 module.exports = {
+  version() {
+    return lib.version();
+  },
   async toJpeg(input, options = { quality: 75 }) {
     const buffer = await getBufferFromInput(input);
 

@@ -19,6 +19,7 @@ declare const types: {
   toJpeg(input: string | Buffer | Readable, options?: JpegOptions): Promise<Buffer>;
   toPng(input: string | Buffer | Readable, options?: PngOptions): Promise<Buffer>;
   extract(input: string | Buffer | Readable): Promise<ExtractedImage[]>;
+  version(): string;
 };
 
 export default types;

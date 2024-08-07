@@ -35,10 +35,26 @@ The **heif-converter** package facilitates the conversion of HEIF (High Efficien
 ## 🦴 Installation
 
 ```bash
-npm install heif-converter
+npm install @myunisoft/heif-converter
 ```
 
 ## 🚀 API
+<details>
+<summary>version</summary>
+<br>
+
+The **version** method is used to obtain the version of libheif.
+
+```ts
+function version(): string;
+```
+```js
+import lib from "../index.js";
+
+console.log(lib.version());
+// 1.17.6
+```
+</details>
 <details>
 <summary>toJpeg</summary>
 <br>

@@ -15,6 +15,12 @@ import lib from "../index.js";
 // CONSTANTS
 const kDirname = path.dirname(fileURLToPath(import.meta.url));
 
+describe("version", () => {
+  it("Should get libheif version", () => {
+    assert.strictEqual(/\d{1}\.\d{1,2}\.\d{1,2}/.test(lib.version()), true);
+  });
+});
+
 describe("toJpeg", () => {
   it("Should convert .heic to .jpeg", async() => {
     const heifFilePath = path.join(kDirname, "image.heic");
