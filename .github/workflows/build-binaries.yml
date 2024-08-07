@@ -1,9 +1,10 @@
 name: Build lib C binaries
 
 on:
-  push:
-    branches:
-      - platform
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'LIBHEIF_VERSION'
 
 jobs:
   push_on_main:

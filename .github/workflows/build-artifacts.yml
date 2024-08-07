@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'package.json'
   pull_request:
     types: [opened, reopened, synchronize]
+    paths:
+      - 'src/lib.cc'
 
 jobs:
   push_on_main:
