@@ -7,7 +7,7 @@ on:
       - 'LIBHEIF_VERSION'
 
 jobs:
-  push_on_main:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
