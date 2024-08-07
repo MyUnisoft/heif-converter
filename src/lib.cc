@@ -290,7 +290,12 @@ Napi::Value ExtractIds(const Napi::CallbackInfo& info) {
     return result;
 }
 
+Napi::String GetVersion(const Napi::CallbackInfo& info) {
+    return Napi::String::New(info.Env(), heif_get_version());
+}
+
 Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
+    exports.Set(Napi::String::New(env, "version"), Napi::Function::New(env, GetVersion));
     exports.Set(Napi::String::New(env, "toPng"), Napi::Function::New(env, ToPng));
     exports.Set(Napi::String::New(env, "toJpeg"), Napi::Function::New(env, ToJpeg));
     exports.Set(Napi::String::New(env, "extractIds"), Napi::Function::New(env, ExtractIds));
