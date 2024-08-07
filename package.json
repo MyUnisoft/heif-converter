@@ -51,11 +51,11 @@
     "tinybench": "^2.8.0"
   },
   "optionalDependencies": {
-    "@myunisoft/heif-converter.darwin-x64": "^0.0.2",
-    "@myunisoft/heif-converter.linux-x64": "^0.1.2",
-    "@myunisoft/heif-converter.linuxmusl-x64": "^0.2.1",
-    "@myunisoft/heif-converter.win32-ia32": "^0.0.2",
-    "@myunisoft/heif-converter.win32-x64": "^0.1.1"
+    "@myunisoft/heif-converter.darwin-x64": "^0.0.4",
+    "@myunisoft/heif-converter.linux-x64": "^0.1.3",
+    "@myunisoft/heif-converter.linuxmusl-x64": "^0.2.2",
+    "@myunisoft/heif-converter.win32-ia32": "^0.0.3",
+    "@myunisoft/heif-converter.win32-x64": "^0.1.2"
   },
   "dependencies": {
     "detect-libc": "^2.0.3"
