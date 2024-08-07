@@ -1,0 +1,101 @@
+name: Build lib C binaries
+
+on:
+  push:
+    branches:
+      - platform
+
+jobs:
+  push_on_main:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linuxmusl-x64
+            arch: x64
+          - os: ubuntu-22.04
+            platform: linux-x64
+            arch: x64
+          - os: windows-latest
+            platform: win32-x64
+            arch: x64
+          - os: windows-latest
+            platform: win32-ia32
+            arch: x86
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Create folders for the tarball
+      run: |
+        mkdir -p binaries/${{ matrix.PLATFORM }}/lib
+        mkdir binaries/${{ matrix.PLATFORM }}/include
+
+    - name: Build and run Docker container
+      run: |
+        # Build image
+        docker build -t ${{ matrix.PLATFORM }} . -f ./platform/${{ matrix.PLATFORM }}/Dockerfile
+
+        # Run container
+        docker run --name ${{ matrix.PLATFORM }} ${{ matrix.PLATFORM }}
+
+    - name: Copy binary and include files (Windows)
+      if: contains(matrix.os, 'windows')
+      env: 
+        source: ${{ matrix.PLATFORM }}:C:/vcpkg/installed/${{ matrix.ARCH }}-windows
+        destination: binaries/${{ matrix.PLATFORM }}
+      run : |
+        # Create the necessary folder
+        mkdir binaries/${{ matrix.PLATFORM }}/bin
+
+        # Copy .dll files
+        docker cp $env:source/bin/heif.dll $env:destination/bin/heif.dll
+        docker cp $env:source/bin/turbojpeg.dll $env:destination/bin/turbojpeg.dll
+        docker cp $env:source/bin/libde265.dll $env:destination/bin/libde265.dll
+        docker cp $env:source/bin/libx265.dll $env:destination/bin/libx265.dll
+        docker cp $env:source/bin/libpng16.dll $env:destination/bin/libpng16.dll
+
+        # Copy lib files
+        docker cp $env:source/lib/heif.lib $env:destination/lib/heif.lib
+        docker cp $env:source/lib/turbojpeg.lib $env:destination/lib/turbojpeg.lib
+        docker cp $env:source/lib/libpng16.lib $env:destination/lib/libpng16.lib
+
+        # Copy includes files
+        docker cp $env:source/include/libheif $env:destination/include/libheif
+        docker cp $env:source/include/png.h $env:destination/include/png.h
+        docker cp $env:source/include/pngconf.h $env:destination/include/pngconf.h
+        docker cp $env:source/include/pnglibconf.h $env:destination/include/pnglibconf.h
+        docker cp $env:source/include/turbojpeg.h $env:destination/include/turbojpeg.h
+
+    - name: Copy binary and include files (Linux)
+      if: contains(matrix.os, 'ubuntu')
+      env: 
+        source: ${{ matrix.PLATFORM }}:/vcpkg/installed/${{ matrix.ARCH }}-linux
+        destination: binaries/${{ matrix.PLATFORM }}
+      run : |
+        # Copy lib files
+        docker cp $source/lib/libheif.a $destination/lib/libheif.a
+        docker cp $source/lib/libturbojpeg.a $destination/lib/libturbojpeg.a
+        docker cp $source/lib/libpng16.a $destination/lib/libpng16.a
+        docker cp $source/lib/libde265.a $destination/lib/libde265.a
+        docker cp $source/lib/libx265.a $destination/lib/libx265.a
+
+        # Copy includes files
+        docker cp $source/include/libheif $destination/include/libheif
+        docker cp $source/include/png.h $destination/include/png.h
+        docker cp $source/include/pngconf.h $destination/include/pngconf.h
+        docker cp $source/include/pnglibconf.h $destination/include/pnglibconf.h
+        docker cp $source/include/turbojpeg.h $destination/include/turbojpeg.h
+
+    - name: Create tarball of the binaries folder
+      run: |
+        cd ./binaries
+        tar -czf ${{ matrix.platform }}.tar.gz *
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: ./binaries/${{ matrix.platform }}.tar.gz

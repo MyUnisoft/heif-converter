@@ -1,4 +1,4 @@
-name: Build and Retrieve Compiled Files
+name: Build Node.js Artifact
 
 on:
   push:
