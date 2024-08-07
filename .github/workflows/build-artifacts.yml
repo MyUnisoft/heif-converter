@@ -72,46 +72,28 @@ jobs:
     - name: Create a folder for the tarball
       run: mkdir -p release/${{ matrix.PLATFORM }}/lib
 
-    - name: Build and run Docker container
-      if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
-      run: |
-        # Build image
-        docker build --build-arg PLATFORM=${{ matrix.PLATFORM }} -t ${{ matrix.PLATFORM }} . -f ./.github/Dockerfile
-
-        # Run container and copy the built file
-        docker run --name ${{ matrix.PLATFORM }} ${{ matrix.PLATFORM }}
-
-        # Copy .node file from the container        
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/${{ matrix.PLATFORM }}/lib/converter.${{ matrix.PLATFORM }}.node
-    
-    - name: Copy .dll files from the container (Windows)
-      if: contains(matrix.os, 'windows')
-      run: |
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/heif.dll ./release/${{ matrix.PLATFORM }}/lib/heif.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/turbojpeg.dll ./release/${{ matrix.PLATFORM }}/lib/turbojpeg.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/jpeg62.dll ./release/${{ matrix.PLATFORM }}/lib/jpeg62.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libde265.dll ./release/${{ matrix.PLATFORM }}/lib/libde265.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libx265.dll ./release/${{ matrix.PLATFORM }}/lib/libx265.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libpng16.dll ./release/${{ matrix.PLATFORM }}/lib/libpng16.dll
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/zlib1.dll ./release/${{ matrix.PLATFORM }}/lib/zlib1.dll
-
-    - name: Clean up the Docker container (Windows and Linux)
-      if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
-      run: docker container rm ${{ matrix.PLATFORM }}
-
-    - name: Configure and Build on OSX
-      if: contains(matrix.os, 'mac')
+    - name: Configure and Build projects
       run: |
         # Build project
         npm install --omit-optional
         npm run configure
         npm run build
 
-        # Run tests
-        npm run test
-
         # Copy .node in the release folder
         cp ./src/build/Release/converter.node ./release/${{ matrix.PLATFORM }}/lib/converter.${{ matrix.PLATFORM }}.node
+
+    - name: Copy .dll files for artifacts and tests (Windows)
+      if: contains(matrix.os, 'windows')
+      run: |
+        # Copy for artifact
+        cp platform/${{ matrix.PLATFORM }}/bin/heif.dll ./release/${{ matrix.PLATFORM }}/lib/heif.dll
+        cp platform/${{ matrix.PLATFORM }}/bin/turbojpeg.dll ./release/${{ matrix.PLATFORM }}/lib/turbojpeg.dll
+        cp platform/${{ matrix.PLATFORM }}/bin/libde265.dll ./release/${{ matrix.PLATFORM }}/lib/libde265.dll
+        cp platform/${{ matrix.PLATFORM }}/bin/libx265.dll ./release/${{ matrix.PLATFORM }}/lib/libx265.dll
+        cp platform/${{ matrix.PLATFORM }}/bin/libpng16.dll ./release/${{ matrix.PLATFORM }}/lib/libpng16.dll
+
+    - name: Run tests
+      run: npm run test
 
     - name: Create tarball of the release folder
       run: |

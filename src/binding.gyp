@@ -24,7 +24,7 @@
                 [
                   '"<!(echo $VCPKG_LIB_ROOT)" == ""', 
                   {
-                    "VCPKG_LIB_ROOT%": "/vcpkg/installed/x64-linux"
+                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/linux-x64"
                   }
                 ]
               ]
@@ -87,7 +87,7 @@
                       [
                         '"<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")" == "undefined"',
                         {
-                          "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x64-windows"
+                          "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/win32-x64"
                         }
                       ]
                     ]
@@ -103,7 +103,7 @@
                       [
                         '"<!(node -e "console.log(process.env.VCPKG_LIB_ROOT)")" == "undefined"',
                         {
-                          "VCPKG_LIB_ROOT%": "C:/vcpkg/installed/x86-windows"
+                          "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/win32-ia32"
                         }
                       ]
                     ]
@@ -123,8 +123,7 @@
             ],
             "include_dirs": [
               "<(VCPKG_LIB_ROOT)/include",
-              "<(VCPKG_LIB_ROOT)/include/libheif",
-              "<(VCPKG_LIB_ROOT)/include/libpng16"
+              "<(VCPKG_LIB_ROOT)/include/libheif"
             ],
             "copies": [
               {
@@ -132,11 +131,9 @@
                 "files": [
                   "<(VCPKG_LIB_ROOT)/bin/heif.dll",
                   "<(VCPKG_LIB_ROOT)/bin/turbojpeg.dll",
-                  "<(VCPKG_LIB_ROOT)/bin/jpeg62.dll",
                   "<(VCPKG_LIB_ROOT)/bin/libde265.dll",
                   "<(VCPKG_LIB_ROOT)/bin/libx265.dll",
-                  "<(VCPKG_LIB_ROOT)/bin/libpng16.dll",
-                  "<(VCPKG_LIB_ROOT)/bin/zlib1.dll"
+                  "<(VCPKG_LIB_ROOT)/bin/libpng16.dll"
                 ]
               }
             ]
