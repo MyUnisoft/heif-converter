@@ -49,8 +49,8 @@ jobs:
             platform: linuxmusl-x64
           - os: ubuntu-22.04
             platform: linux-x64
-          # - os: macos-12
-            # platform: darwin-x64
+          - os: macos-12
+            platform: darwin-x64
           - os: windows-latest
             platform: win32-x64
           - os: windows-latest
@@ -59,20 +59,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+    
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
 
-    - name: Install dependencies
-      run: npm install --omit=optional
-
     - name: Create a folder for the tarball
-      run: |
-        mkdir release
-        cd release
-        mkdir lib
+      run: mkdir -p release/${{ matrix.PLATFORM }}/lib
 
     - name: Build and run Docker container
       if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
@@ -84,20 +78,18 @@ jobs:
         docker run --name ${{ matrix.PLATFORM }} ${{ matrix.PLATFORM }}
 
         # Copy .node file from the container        
-        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/lib/converter.${{ matrix.PLATFORM }}.node
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/converter.node ./release/${{ matrix.PLATFORM }}/lib/converter.${{ matrix.PLATFORM }}.node
     
     - name: Copy .dll files from the container (Windows)
       if: contains(matrix.os, 'windows')
-      env:
-        SRC_PATH: /heif-converter/src/build/Release
       run: |
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/heif.dll ./release/lib/heif.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/turbojpeg.dll ./release/lib/turbojpeg.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/jpeg62.dll ./release/lib/jpeg62.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libde265.dll ./release/lib/libde265.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libx265.dll ./release/lib/libx265.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/libpng16.dll ./release/lib/libpng16.dll
-        docker cp ${{ matrix.PLATFORM }}:${{ env.SRC_PATH }}/zlib1.dll ./release/lib/zlib1.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/heif.dll ./release/${{ matrix.PLATFORM }}/lib/heif.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/turbojpeg.dll ./release/${{ matrix.PLATFORM }}/lib/turbojpeg.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/jpeg62.dll ./release/${{ matrix.PLATFORM }}/lib/jpeg62.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libde265.dll ./release/${{ matrix.PLATFORM }}/lib/libde265.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libx265.dll ./release/${{ matrix.PLATFORM }}/lib/libx265.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/libpng16.dll ./release/${{ matrix.PLATFORM }}/lib/libpng16.dll
+        docker cp ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release/zlib1.dll ./release/${{ matrix.PLATFORM }}/lib/zlib1.dll
 
     - name: Clean up the Docker container (Windows and Linux)
       if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'windows')
@@ -106,26 +98,16 @@ jobs:
     - name: Configure and Build on OSX
       if: contains(matrix.os, 'mac')
       run: |
-        # Install nasm (useful for vcpkg)
-        brew install nasm
-
-        # Install python setup tools
-        pip3 install setuptools
-
-        # Clone vcpkg and install libheif
-        git clone https://github.com/microsoft/vcpkg.git
-        ./vcpkg/bootstrap-vcpkg.sh
-        ./vcpkg/vcpkg install libheif
-
         # Build project
+        npm install --omit-optional
         npm run configure
         npm run build
 
         # Run tests
-        # npm run test
+        npm run test
 
         # Copy .node in the release folder
-        cp ./src/build/Release/converter.node ./release/lib/converter.${{ matrix.PLATFORM }}.node
+        cp ./src/build/Release/converter.node ./release/${{ matrix.PLATFORM }}/lib/converter.${{ matrix.PLATFORM }}.node
 
     - name: Create tarball of the release folder
       run: |

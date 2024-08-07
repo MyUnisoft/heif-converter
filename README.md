@@ -80,7 +80,7 @@ import lib from "../index.js";
 
 const pngBuffer = await lib.toPng("image.heic", { compression: 5 });
 ```
-> The value of the compression` option is from 1 to 9. Default 1.
+> The value of the compression option is from 1 to 9. Default 1.
 
 </details>
 <details>
@@ -115,7 +115,7 @@ for (image of images) {
 
 </details>
 
-## Benchmark
+## 📢 Benchmark
 
 The benchmark is accessible in the ./benchmark folder. You can run the following commands.
 ```bash
