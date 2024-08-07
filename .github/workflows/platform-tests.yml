@@ -1,0 +1,38 @@
+name: Platform tests
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'package.json'
+
+jobs:
+  push_on_main:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linuxmusl-x64
+          - os: ubuntu-22.04
+            platform: linux-x64
+          - os: macos-12
+            platform: darwin-x64
+          - os: windows-latest
+            platform: win32-x64
+          - os: windows-latest
+            platform: win32-ia32
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies and test
+      run: |
+        npm install
+        npm run test
