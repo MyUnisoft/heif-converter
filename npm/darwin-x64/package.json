@@ -1,6 +1,6 @@
 {
   "name": "@myunisoft/heif-converter.darwin-x64",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Prebuilt heif-converter for use with macOs x64",
   "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
   "homepage": "https://github.com/MyUnisoft/heif-converter",
