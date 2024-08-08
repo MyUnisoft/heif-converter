@@ -1,6 +1,6 @@
 {
   "name": "@myunisoft/heif-converter.linuxmusl-x64",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Prebuilt heif-converter for use with linux x64",
   "author": "Nicolas Marteau <nico_mart@hotmail.fr>",
   "homepage": "https://github.com/MyUnisoft/heif-converter",
