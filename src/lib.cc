@@ -7,12 +7,31 @@
 #include <stdexcept>
 #include <cstring>
 
+enum InputType {
+    Buffer,
+    File
+};
+
 class ToJpegWorker : public Napi::AsyncWorker {
 public:
-    ToJpegWorker(const Napi::Buffer<uint8_t>& buffer, heif_item_id image_id, const Napi::Object& options, Napi::Function& callback)
-        : Napi::AsyncWorker(callback), bufferRef(Napi::Persistent(buffer)), imageId(image_id) {
-        data = buffer.Data();
-        size = buffer.Length();
+    ToJpegWorker(const Napi::Value& input, heif_item_id image_id, const Napi::Object& options, Napi::Function& callback)
+        : Napi::AsyncWorker(callback), imageId(image_id) {
+            
+        if (input.IsBuffer()) {
+            Napi::Buffer<uint8_t> buffer = input.As<Napi::Buffer<uint8_t>>();
+            data = buffer.Data();
+            size = buffer.Length();
+            inputType = InputType::Buffer;
+            bufferRef = Napi::Persistent(buffer);
+        } else if (input.IsString()) {
+            filePath = input.As<Napi::String>();
+            inputType = InputType::File;
+        } else {
+            SetError("Invalid input type. Expected a Buffer or a String.");
+
+            return;  
+        }
+
         quality = options.Get("quality").As<Napi::Number>().Int32Value();
     }
 
@@ -20,7 +39,14 @@ public:
 
     void Execute() override {
         struct heif_context* ctx = heif_context_alloc();
-        struct heif_error err = heif_context_read_from_memory(ctx, data, size, nullptr);
+        struct heif_error err;
+
+        if (inputType == InputType::Buffer) {
+            err = heif_context_read_from_memory(ctx, data, size, nullptr);
+        } else {
+            err = heif_context_read_from_file(ctx, filePath.c_str(), nullptr);
+        }
+
         if (err.code != heif_error_Ok) {
             heif_context_free(ctx);
             SetError("Failed to read HEIF data: " + std::string(err.message));
@@ -88,9 +114,11 @@ public:
     }
 
 private:
+    InputType inputType;
     Napi::Reference<Napi::Buffer<uint8_t>> bufferRef;
-    const uint8_t* data;
-    size_t size;
+    const uint8_t* data = nullptr;
+    size_t size = 0;
+    std::string filePath;
     heif_item_id imageId;
     int quality;
     std::vector<uint8_t> jpegData;
@@ -98,10 +126,19 @@ private:
 
 class ToPngWorker : public Napi::AsyncWorker {
 public:
-    ToPngWorker(const Napi::Buffer<uint8_t>& buffer, heif_item_id image_id, const Napi::Object& options, Napi::Function& callback)
-        : Napi::AsyncWorker(callback), bufferRef(Napi::Persistent(buffer)), imageId(image_id) {
-        data = buffer.Data();
-        size = buffer.Length();
+    ToPngWorker(const Napi::Value& input, heif_item_id image_id, const Napi::Object& options, Napi::Function& callback)
+        : Napi::AsyncWorker(callback), imageId(image_id) {
+            
+        if (input.IsBuffer()) {
+            Napi::Buffer<uint8_t> buffer = input.As<Napi::Buffer<uint8_t>>();
+            data = buffer.Data();
+            size = buffer.Length();
+            inputType = InputType::Buffer;
+            bufferRef = Napi::Persistent(buffer);
+        } else {
+            filePath = input.As<Napi::String>();
+            inputType = InputType::File;
+        }
 
         compression = options.Get("compression").As<Napi::Number>().Int32Value();
     }
@@ -110,7 +147,14 @@ public:
 
     void Execute() override {
         struct heif_context* ctx = heif_context_alloc();
-        struct heif_error err = heif_context_read_from_memory(ctx, data, size, nullptr);
+        struct heif_error err;
+
+        if (inputType == InputType::Buffer) {
+            err = heif_context_read_from_memory(ctx, data, size, nullptr);
+        } else {
+            err = heif_context_read_from_file(ctx, filePath.c_str(), nullptr);
+        }
+
         if (err.code != heif_error_Ok) {
             heif_context_free(ctx);
             SetError("Failed to read HEIF data: " + std::string(err.message));
@@ -209,9 +253,11 @@ public:
     }
 
 private:
+    InputType inputType;
     Napi::Reference<Napi::Buffer<uint8_t>> bufferRef;
-    const uint8_t* data;
-    size_t size;
+    const uint8_t* data = nullptr;
+    size_t size = 0;
+    std::string filePath;
     heif_item_id imageId;
     std::vector<uint8_t> pngBuffer;
     int compression;
@@ -219,7 +265,7 @@ private:
 
 Napi::Value ToJpeg(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
+    Napi::Value input = info[0];
 
     heif_item_id imageId = -1;
     if (info[1].IsNumber()) {
@@ -229,14 +275,14 @@ Napi::Value ToJpeg(const Napi::CallbackInfo& info) {
     Napi::Object options = info[2].As<Napi::Object>();
     Napi::Function callback = info[3].As<Napi::Function>();
 
-    ToJpegWorker* worker = new ToJpegWorker(buffer, imageId, options, callback);
+    ToJpegWorker* worker = new ToJpegWorker(input, imageId, options, callback);
     worker->Queue();
     return env.Undefined();
 }
 
 Napi::Value ToPng(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
+    Napi::Value input = info[0];
     
     heif_item_id imageId = -1;
     if (info[1].IsNumber()) {
@@ -246,16 +292,29 @@ Napi::Value ToPng(const Napi::CallbackInfo& info) {
     Napi::Object options = info[2].As<Napi::Object>();
     Napi::Function callback = info[3].As<Napi::Function>();
 
-    ToPngWorker* worker = new ToPngWorker(buffer, imageId, options, callback);
+    ToPngWorker* worker = new ToPngWorker(input, imageId, options, callback);
     worker->Queue();
     return env.Undefined();
 }
 
 Napi::Value ExtractIds(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    Napi::Buffer<uint8_t> buffer = info[0].As<Napi::Buffer<uint8_t>>();
-    const uint8_t* data = buffer.Data();
-    size_t size = buffer.Length();
+    InputType inputType;
+    const uint8_t* data = nullptr;
+    size_t size = 0;
+    std::string filePath;
+
+    Napi::Value input = info[0];
+
+    if (input.IsBuffer()) {
+        Napi::Buffer<uint8_t> buffer = input.As<Napi::Buffer<uint8_t>>();
+        data = buffer.Data();
+        size = buffer.Length();
+        inputType = InputType::Buffer;
+    } else {
+        filePath = input.As<Napi::String>();
+        inputType = InputType::File;
+    }
 
     struct heif_context* ctx = heif_context_alloc();
     if (!ctx) {
@@ -263,7 +322,13 @@ Napi::Value ExtractIds(const Napi::CallbackInfo& info) {
         return env.Null();
     }
 
-    struct heif_error err = heif_context_read_from_memory(ctx, data, size, nullptr);
+    struct heif_error err;
+    if (inputType == InputType::Buffer) {
+        err = heif_context_read_from_memory(ctx, data, size, nullptr);
+    } else {
+        err = heif_context_read_from_file(ctx, filePath.c_str(), nullptr);
+    }
+
     if (err.code != heif_error_Ok) {
         heif_context_free(ctx);
         Napi::TypeError::New(env, "Failed to read HEIF data: " + std::string(err.message)).ThrowAsJavaScriptException();
