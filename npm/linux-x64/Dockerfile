@@ -1,6 +1,5 @@
-FROM node:18-bullseye
+FROM node:18-buster
 LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"
-USER root
 
 RUN apt-get update && \
     apt-get install -y \
@@ -8,6 +7,7 @@ RUN apt-get update && \
     python3 \
     python3-setuptools \
     python3-mako \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /heif-converter
