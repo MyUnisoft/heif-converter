@@ -5,6 +5,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - 'src/lib.cc'
+      - '.github/workflows/build-node-artifacts.yml'
 
 jobs:
   build:
@@ -35,7 +36,24 @@ jobs:
     - name: Create a folder for the tarball
       run: mkdir -p release/${{ matrix.PLATFORM }}/lib
 
-    - name: Configure and Build projects
+    - name: Configure and Build projects (Linux)
+      if: contains(matrix.os, 'ubuntu')
+      run: |
+        # Build image
+        docker build -t ${{ matrix.PLATFORM }} . -f ./npm/${{ matrix.PLATFORM }}/Dockerfile
+
+        # Run container
+        docker run --name ${{ matrix.PLATFORM }} ${{ matrix.PLATFORM }}
+
+    - name: Copy .node file from docker container (Linux)
+      if: contains(matrix.os, 'ubuntu')
+      env: 
+        source: ${{ matrix.PLATFORM }}:/heif-converter/src/build/Release
+        destination: ./release/${{ matrix.PLATFORM }}/lib
+      run: docker cp $source/converter.node $destination/converter.${{ matrix.PLATFORM }}.node
+
+    - name: Configure and Build projects (Windows & OSX)
+      if: "!contains(matrix.os, 'ubuntu')"
       run: |
         # Build project
         npm install --omit-optional
@@ -56,6 +74,7 @@ jobs:
         cp platform/${{ matrix.PLATFORM }}/bin/libpng16.dll ./release/${{ matrix.PLATFORM }}/lib/libpng16.dll
 
     - name: Run tests
+      if: "!contains(matrix.os, 'ubuntu')"
       run: npm run test
 
     - name: Create tarball of the release folder
