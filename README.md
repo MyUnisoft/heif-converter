@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./docs/images/heif-converter.jpg"/>
+<img src="./docs/images/heif-converter.png"/>
 </p>
 
 # 🥦 HEIF-Converter
