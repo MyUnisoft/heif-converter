@@ -52,8 +52,8 @@
   },
   "optionalDependencies": {
     "@myunisoft/heif-converter.darwin-x64": "^0.0.6",
-    "@myunisoft/heif-converter.linux-x64": "^0.1.4",
-    "@myunisoft/heif-converter.linuxmusl-x64": "^0.2.3",
+    "@myunisoft/heif-converter.linux-x64": "^0.1.5",
+    "@myunisoft/heif-converter.linuxmusl-x64": "^0.2.4",
     "@myunisoft/heif-converter.win32-ia32": "^0.0.4",
     "@myunisoft/heif-converter.win32-x64": "^0.1.3"
   },
