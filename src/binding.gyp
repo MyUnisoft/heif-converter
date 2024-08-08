@@ -24,7 +24,7 @@
                 [
                   '"<!(echo $VCPKG_LIB_ROOT)" == ""', 
                   {
-                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/linux-x64"
+                    "VCPKG_LIB_ROOT%": "<(module_root_dir)/../platform/linux<!(node ../libc.js)-x64"
                   }
                 ]
               ]
