@@ -74,9 +74,14 @@ function toJpeg(
 ): Promise<Buffer>;
 ```
 ```js
+// Import Node.js Dependencies
+import path from "node:path";
+
+// Import Internal Dependencies
 import lib from "../index.js";
 
-const jpegBuffer = await lib.toJpeg("image.heic", { quality: 20 });
+const filePath = path.join(__dirname, "image.heic")
+const jpegBuffer = await lib.toJpeg(filePath, { quality: 20 });
 ```
 > The value of the quality option is from 0 to 100. Default 75.
 
@@ -92,9 +97,14 @@ The **toPng** method converts the primary image of a HEIC file to **png**.
 function toPng(input: string | Buffer | Readable): Promise<Buffer>;
 ```
 ```js
+// Import Node.js Dependencies
+import path from "node:path";
+
+// Import Internal Dependencies
 import lib from "../index.js";
 
-const pngBuffer = await lib.toPng("image.heic", { compression: 5 });
+const filePath = path.join(__dirname, "image.heic")
+const pngBuffer = await lib.toPng(filePath, { compression: 5 });
 ```
 > The value of the compression option is from 1 to 9. Default 1.
 
@@ -121,9 +131,14 @@ interface ExtractedImage {
 function extract(input: string | Buffer | Readable): Promise<ExtractedImage[]>;
 ```
 ```js
+// Import Node.js Dependencies
+import path from "node:path";
+
+// Import Internal Dependencies
 import lib from "../index.js";
 
-const images = await lib.extract("image.heic");
+const filePath = path.join(__dirname, "image.heic")
+const images = await lib.extract(filePath);
 for (image of images) {
   const jpegBuffer = await image.toJpeg({ quality: 50 });
 }

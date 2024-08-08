@@ -1,6 +1,6 @@
 // Import Node.js Dependencies
 const { Readable } = require("node:stream");
-const fs = require("node:fs");
+const consumers = require("node:stream/consumers");
 
 // Import Third-Party Dependencies
 const { familySync, MUSL } = require("detect-libc");
@@ -34,21 +34,18 @@ if (lib === null) {
   throw new Error(errorMessages.join("\n"));
 }
 
-async function getBufferFromInput(input) {
-  let stream = input;
-  if (typeof input === "string") {
-    stream = fs.createReadStream(input);
-  }
-  else if (input instanceof Buffer) {
-    stream = Readable.from(stream);
+function getBufferOrStringFromInput(input) {
+  if (typeof input === "string" || input instanceof Buffer) {
+    return input;
   }
 
-  const buffers = [];
-  for await (const chunk of stream) {
-    buffers.push(chunk);
+  if (input instanceof Readable) {
+    return consumers.buffer(input);
   }
 
-  return Buffer.concat(buffers);
+  throw new Error(
+    "[heif-converter] : Invalid input type. Expected a Buffer, a String or a Stream."
+  );
 }
 
 module.exports = {
@@ -56,38 +53,38 @@ module.exports = {
     return lib.version();
   },
   async toJpeg(input, options = { quality: 75 }) {
-    const buffer = await getBufferFromInput(input);
+    const data = await getBufferOrStringFromInput(input);
 
     return await new Promise((res, rej) => lib.toJpeg(
-      buffer,
+      data,
       undefined,
       options,
-      (err, data) => (err ? rej(err) : res(data))
+      (err, buffer) => (err ? rej(err) : res(buffer))
     ));
   },
 
   async toPng(input, options = { compression: 1 }) {
-    const buffer = await getBufferFromInput(input);
+    const data = await getBufferOrStringFromInput(input);
 
     return await new Promise((res, rej) => lib.toPng(
-      buffer,
+      data,
       undefined,
       options,
-      (err, data) => (err ? rej(err) : res(data))
+      (err, buffer) => (err ? rej(err) : res(buffer))
     ));
   },
 
   async extract(input) {
-    const buffer = await getBufferFromInput(input);
-    const ids = lib.extractIds(buffer);
+    const data = await getBufferOrStringFromInput(input);
+    const ids = lib.extractIds(data);
 
     return ids.map((id) => {
       return {
         toJpeg: (options = { quality: 75 }) => new Promise((res, rej) => {
-          lib.toJpeg(buffer, id, options, (err, data) => (err ? rej(err) : res(data)));
+          lib.toJpeg(data, id, options, (err, buffer) => (err ? rej(err) : res(buffer)));
         }),
         toPng: (options = { compression: 1 }) => new Promise((res, rej) => {
-          lib.toPng(buffer, id, options, (err, data) => (err ? rej(err) : res(data)));
+          lib.toPng(data, id, options, (err, buffer) => (err ? rej(err) : res(buffer)));
         })
       };
     });
