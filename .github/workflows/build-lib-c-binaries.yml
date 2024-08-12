@@ -5,6 +5,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - 'LIBHEIF_VERSION'
+      - '**/platform/**/Dockerfile'
 
 jobs:
   build:

@@ -5,6 +5,10 @@
 # 🥦 HEIF-Converter
 > This module uses the C APIs libheif to bind it in Node.js using N-API.
 
+## Engine
+> - Node.js 18.x  
+> - MacOS x64, Windows x64/x86 and Linux x64
+
 ## ⭐ Introduction
 
 The **libheif** library is a software library used to read and write HEIF (High Efficiency Image Format) files.
@@ -30,7 +34,6 @@ Before installing **heif-converter**, make sure you have the following tools ins
 
 ## 🎈 Conversion
 The **heif-converter** package facilitates the conversion of HEIF (High Efficiency Image File Format) images to other formats. However, it's important to note that this package specifically handles static images and does not support animated images. Additionally, metadata and auxiliary images within the HEIF file are not currently supported by the converter. You're welcome to contribute by suggesting improvements or enhancements to its functionality 😃.
-> heif-converter runs on macOS x64, Windows x64/x86 and Linux x64. 
 
 ## 🦴 Installation
 
