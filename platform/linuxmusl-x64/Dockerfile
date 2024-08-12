@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM alpine
 LABEL maintainer="Nicolas Marteau <nico_mart@hotmail.fr>"
 
 ENV VCPKG_FORCE_SYSTEM_BINARIES 1
@@ -25,6 +25,9 @@ RUN apk --no-cache add \
     curl && \
     ln -sf python3 /usr/bin/python
 
+WORKDIR /heif-converter
+COPY . .
+
 RUN git clone https://github.com/ninja-build/ninja.git /tmp/ninja \
     && cd /tmp/ninja \
     && git checkout v1.10.2 \
@@ -35,4 +38,4 @@ RUN git clone https://github.com/ninja-build/ninja.git /tmp/ninja \
 
 RUN git clone https://github.com/microsoft/vcpkg.git && \
     ./vcpkg/bootstrap-vcpkg.sh && \
-    ./vcpkg/vcpkg install libheif
+    ./vcpkg/vcpkg install

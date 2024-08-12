@@ -1,0 +1,20 @@
+{
+  "dependencies": [
+      "libheif",
+      { 
+        "name": "libpng", 
+        "platform": "windows"
+      },
+      { 
+        "name": "libjpeg-turbo", 
+        "platform": "windows"
+      }
+  ],
+  "overrides": [
+    {
+      "name": "libheif", 
+      "version": "1.17.6"
+    }
+  ],
+  "builtin-baseline": "7618666e79df4aca28a6d6343492f4b8af740e38"
+}
