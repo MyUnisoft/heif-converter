@@ -5,6 +5,8 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - 'package.json'
+      - 'platform-tests.yml'
+      - '**/npm/**/Dockerfile'
 
 jobs:
   test:
@@ -32,7 +34,12 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install dependencies and test
+    - name: use Docker image to test package (Linux)
+      if: contains(matrix.os, 'ubuntu')
+      run: docker build -t ${{ matrix.PLATFORM }} . -f ./npm/${{ matrix.PLATFORM }}/Dockerfile
+
+    - name: Install dependencies and test package (Win32 & OSX)
+      if: "!contains(matrix.os, 'ubuntu')"
       run: |
         npm install
         npm run test

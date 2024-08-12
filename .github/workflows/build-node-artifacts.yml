@@ -6,6 +6,7 @@ on:
     paths:
       - 'src/lib.cc'
       - '.github/workflows/build-node-artifacts.yml'
+      - '**/npm/**/Dockerfile'
 
 jobs:
   build:
