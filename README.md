@@ -6,8 +6,12 @@
 > This module uses the C APIs libheif to bind it in Node.js using N-API.
 
 ## Engine
-> - Node.js 18.x  
-> - MacOS x64, Windows x64/x86 and Linux x64
+### Node
+- Node.js 18.x  
+### Prebuilt binaries
+- MacOS x64 (>= 12)  
+- Windows x64/x86  
+- Linux x64 (glibc >= 2.28, musl >= 1.2.4)
 
 ## ⭐ Introduction
 
@@ -34,6 +38,9 @@ Before installing **heif-converter**, make sure you have the following tools ins
 
 ## 🎈 Conversion
 The **heif-converter** package facilitates the conversion of HEIF (High Efficiency Image File Format) images to other formats. However, it's important to note that this package specifically handles static images and does not support animated images. Additionally, metadata and auxiliary images within the HEIF file are not currently supported by the converter. You're welcome to contribute by suggesting improvements or enhancements to its functionality 😃.
+
+## Developer
+If you wish to contribute or build libheif from source, you can visit [this link](./docs/developer.md).
 
 ## 🦴 Installation
 
