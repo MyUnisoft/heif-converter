@@ -18,9 +18,6 @@ RUN apt-get update && \
     python3-mako \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
-
 RUN git clone https://github.com/microsoft/vcpkg.git && \
     ./vcpkg/bootstrap-vcpkg.sh && \
     ./vcpkg/vcpkg install libheif
