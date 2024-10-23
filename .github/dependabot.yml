@@ -4,6 +4,8 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "actions/upload-artifact"
     groups:
       github-actions:
         patterns:
@@ -14,6 +16,8 @@ updates:
     versioning-strategy: widen
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "node-gyp"
     groups:
       dependencies:
         dependency-type: "production"
