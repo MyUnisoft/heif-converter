@@ -5,6 +5,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - '**/platform/**/Dockerfile'
+      - '.github/workflows/build-lib-c-binaries.yml'
 
 jobs:
   build:
@@ -57,11 +58,13 @@ jobs:
         docker cp $env:source/bin/libde265.dll $env:destination/bin/libde265.dll
         docker cp $env:source/bin/libx265.dll $env:destination/bin/libx265.dll
         docker cp $env:source/bin/libpng16.dll $env:destination/bin/libpng16.dll
+        docker cp $env:source/bin/zlib1.dll $env:destination/bin/zlib1.dll
 
         # Copy lib files
         docker cp $env:source/lib/heif.lib $env:destination/lib/heif.lib
         docker cp $env:source/lib/turbojpeg.lib $env:destination/lib/turbojpeg.lib
         docker cp $env:source/lib/libpng16.lib $env:destination/lib/libpng16.lib
+        docker cp $env:source/lib/zlib.lib $env:destination/lib/zlib.lib
 
         # Copy includes files
         docker cp $env:source/include/libheif $env:destination/include/libheif
@@ -69,6 +72,7 @@ jobs:
         docker cp $env:source/include/pngconf.h $env:destination/include/pngconf.h
         docker cp $env:source/include/pnglibconf.h $env:destination/include/pnglibconf.h
         docker cp $env:source/include/turbojpeg.h $env:destination/include/turbojpeg.h
+        docker cp $env:source/include/zlib.h $env:destination/include/zlib.h
 
     - name: Copy binary and include files (Linux)
       if: contains(matrix.os, 'ubuntu')
